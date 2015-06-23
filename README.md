@@ -13,6 +13,6 @@ For this challenge, we’d like for you to provide us with a VirtualBox image th
 We shall provide you with a Dropbox link to upload the virtual machine image or if you have an AWS account handy, do give us a link to an S3 bucket to download it from. 
 
 Bonus points:
-* TPC-H tables are in 3NF. Major bonus points if you can provide a second set of tables in the dimensional model and the transformational logic to populate them. We shall award points even if this item is incomplete but clearly shows the beginnings of a viable solution.
-* Points, too, if you can provide a few more queries outside of the TPC-H set that demonstrate your understanding of the schema and its data.
 
+1. TPC-H tables are in 3NF. Major bonus points if you can provide a second set of tables in the dimensional model and the transformational logic to populate them. We shall award points even if this item is incomplete but clearly shows the beginnings of a viable solution.
+1. Points, too, if you can provide a few more queries outside of the TPC-H set that demonstrate your understanding of the schema and its data.
