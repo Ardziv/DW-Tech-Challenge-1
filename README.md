@@ -4,11 +4,11 @@ TPC-H (http://www.tpc.org/information/current_specifications.asp) is considered 
 
 For this challenge, we’d like for you to provide us with a VirtualBox image that contains a runnable instance of a TPC-H database along with mechanisms to generate and load the data and run queries on them. We will score the challenge based on these deliverables:
 
-1. [Environment](environment)
-1. [Data generation and loading](data-generation-and-loading)
-1. [Data verification](data-verification)
-1. [Star schema](star-schema)
-1. [Extra queries](extra-queries)
+1. [Environment](#environment)
+1. [Data generation and loading](#data-generation-and-loading)
+1. [Data verification](#data-verification)
+1. [Star schema](#star-schema)
+1. [Extra queries](#extra-queries)
 
 Please provide a `README` that will let us know where the different components are and how to run them. 
 
@@ -59,11 +59,11 @@ Write a Linux shell script named `check_distribution.sh` that will compare count
 1. On the filesystem, also get the same aggregates for `field_position` within `file_name`. Hint: There are Linux commands to get this so you don't have to write your own function.
     
 1. Join the counts from the database and file and tabulate. For example, we invoke this on the command line:
-    ```sh
-    check_distribution.sh ./data customer.tbl 7 tpch customer c_mktsegment
-        ```
+```sh
+check_distribution.sh ./data customer.tbl 7 tpch customer c_mktsegment
+ ```
 
-    And we get something like this as output:
+	And we get something like this as output:
     ```sh
     AUTOMOBILE 29752 29752
     BUILDING 30142 30142
