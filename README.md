@@ -59,7 +59,7 @@ Write a Linux shell script named `check_distribution.sh` that will compare count
    order by column_name
 ```
 
-1. On the filesystem, also get the same aggregates for `field_position` within `file_name`. Hint: There are Linux commands to get this so you don't have to write your own function.
+1. On the filesystem, also get the same aggregates for `field_position` within `source_filename`. Hint: There are Linux commands to get this so you don't have to write your own function.
     
 1. Join the counts from the database and file and tabulate. For example, we invoke this on the command line:
 
