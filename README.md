@@ -4,11 +4,11 @@ TPC-H (http://www.tpc.org/information/current_specifications.asp) is considered 
 
 For this challenge, we’d like for you to provide us with a VirtualBox image that contains a runnable instance of a TPC-H database along with mechanisms to generate and load the data and run queries on them. We will score the challenge based on these deliverables:
 
-1. [Environment](#environment)
-1. [Data generation and loading](#data-generation-and-loading)
-1. [Data verification](#data-verification)
-1. [Star schema](#star-schema)
-1. [Extra queries](#extra-queries)
+1. [Environment](#markdown-header-environment)
+1. [Data generation and loading](#markdown-header-data-generation-and-loading)
+1. [Data verification](#markdown-header-data-verification)
+1. [Star schema](#markdown-header-star-schema)
+1. [Extra queries](#markdown-header-extra-queries)
 
 Please provide a `README` that will let us know where the different components are and how to run them. 
 
