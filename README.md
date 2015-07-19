@@ -49,28 +49,36 @@ Write a Linux shell script named `check_distribution.sh` that will compare count
     * `column_name` -- The column in `table_name`. 
     
 1. In the database, get column aggregates via a query like:
-    ```sql
-    select column_name, count(*)
-    from table_name
-    group by column_name
-    order by column_name
-    ```
+
+```
+#!sql
+
+   select column_name, count(*)
+   from table_name
+   group by column_name
+   order by column_name
+```
 
 1. On the filesystem, also get the same aggregates for `field_position` within `file_name`. Hint: There are Linux commands to get this so you don't have to write your own function.
     
 1. Join the counts from the database and file and tabulate. For example, we invoke this on the command line:
-```sh
-check_distribution.sh ./data customer.tbl 7 tpch customer c_mktsegment
- ```
 
-	And we get something like this as output:
-    ```sh
+```
+#!sh
+
+   check_distribution.sh ./data customer.tbl 7 tpch customer c_mktsegment
+```
+
+   And we get something like this as output:
+    
+```
+#!sh
     AUTOMOBILE 29752 29752
     BUILDING 30142 30142
     FURNITURE 29968 29968
     HOUSEHOLD 30189 30189
     MACHINERY 29949 29949
-    ```
+```
 
 ### Star schema
 
@@ -79,4 +87,3 @@ TPC-H tables are in 3NF. Provide a second set of tables in the dimensional model
 ### Extra queries
 
 Points, too, if you can provide a few more queries outside of the TPC-H set that demonstrate your understanding of the schema and its data.
-
