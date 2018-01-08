@@ -2,39 +2,41 @@
 
 TPC-H (http://www.tpc.org/information/current_specifications.asp) is considered the industry standard when benchmarking decision support systems. It consists of a well defined schema, a data population generator and updater, and various queries that, taken together, are a good representation of a common DSS environment.
 
-For this challenge, we’d like for you to provide us with a VirtualBox image that contains a runnable instance of a TPC-H database along with mechanisms to generate and load the data and run queries on them. We will score the challenge based on these deliverables:
+For this challenge, we'd like for you to provide us with a throwaway AWS account that contains a running instance of a TPC-H database along with mechanisms to generate and load the data and run queries on them. We will score the challenge based on these deliverables:
 
 1. [Environment](#markdown-header-environment)
 1. [Data generation and loading](#markdown-header-data-generation-and-loading)
 1. [Data verification](#markdown-header-data-verification)
+1. [Ideal architecture](#markdown-header-ideal-architecture)
 1. [Star schema](#markdown-header-star-schema)
 1. [Extra queries](#markdown-header-extra-queries)
 
-Please provide a `README` that will let us know where the different components are and how to run them. 
-
-We shall provide you with a Dropbox link to upload the virtual machine image or if you have an AWS account handy, do give us a link to an S3 bucket to download it from. 
+Please provide a `README` to describe what you've done, your reasoning and any instructions you want to provide. You may wish to provide us with IAM credentials (with billing turned off) in a separate channel.
 
 
 ### Environment
 
-Prepare a Linux instance exported as a VirtualBox appliance. Maximum image size should be under 1.5 GB. The instance should also contain a PostgreSQL database that contains empty TPC-H tables.
+Your TPC-H database could be as simple as PostgreSQL hosted on an EC2 instance to RDS. Please describe how you set up your environment in your README. Bonus points if you use IaC tools such as Terraform or Ansible.
 
 ### Data generation and loading
 
 Write a Python/Ruby/Perl script named `populate` (extension dependent on language) that will:
 
 1. Invoke dbgen with a specfied scale to create the TPC-H input datasets.
-1. Take those input datasets and load them to the corresponding tables in the Pg database. Tables will have to be truncated prior to each load.
+1. Take those input datasets and load them to the corresponding tables in the database. Tables will have to be truncated prior to each load.
 1. Fail on any error.
 1. Accept these ordered arguments:
     * `scale` -- integer value to be used when invoking dbgen
     * `data_path` -- filesystem directory that will contain the files that qgen will generate. Should fail if the destination is not empty. Create if it doesn't exist.
-    * `db_name` -- name of Pg database that contains the empty TPC-H tables. 
+    * `db_name` -- name of database that contains the empty TPC-H tables.
         
 As an example, the following will generate data at scale 1, store them inside the directory `data` and load into the database `tpch`.
+
 ```sh
 python populate.py 1 ./data tpch
 ```
+
+If your script needs to connect to a remote database, it is up to you on how you'll connect to it and how to pass the credentials.
 
 ### Data verification
 
@@ -44,7 +46,7 @@ Write a Linux shell script named `check_distribution.sh` that will compare count
     * `data_path` -- filesystem directory where the source files from qgen are located.
     * `source_filename` -- One of the files created by dbgen (i.e. `customer.tbl` corresponds to table `CUSTOMER`).
     * `field_position` -- The nth field within `source_filename` (i.e. within `customer.tbl`, the 7th field corresponds to the `CUSTOMER.C_MKTSEGMENT` column).
-    * `db_name` -- name of the Pg database.
+    * `db_name` -- name of the database.
     * `table_name` -- The table name in the database.
     * `column_name` -- The column in `table_name`. 
     
@@ -79,6 +81,10 @@ Write a Linux shell script named `check_distribution.sh` that will compare count
     HOUSEHOLD 30189 30189
     MACHINERY 29949 29949
 ```
+
+### Ideal architecture
+
+Since there's a limitation on what services you can use under the free tier, please think of an ideal architecture for handling petabytes of data (end to end; all the way from data ingestion to loading it in a queryable service) and document it in your README.
 
 ### Star schema
 
