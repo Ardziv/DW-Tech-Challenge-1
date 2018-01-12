@@ -3,6 +3,8 @@
 SRCPATH=$1
 DSTPATH=$2
 for i in `ls ${SRCPATH}/*.tbl`; do 
-sed 's/|$//' $i > ${DSTPATH}/${i/tbl/csv}; 
+j=`basename $i`
+echo $j
+sed 's/|$//' $i > ${DSTPATH}/${j/tbl/csv}; 
 echo $i; 
 done;
