@@ -1,3 +1,8 @@
-#!env bash
+#!/usr/bin/env bash
 
-for i in `ls *.tbl`; do sed 's/|$//' $i > ${i/tbl/csv}; echo $i; done;
+SRCPATH=$1
+DSTPATH=$2
+for i in `ls ${SRCPATH}/*.tbl`; do 
+sed 's/|$//' $i > ${DSTPATH}/${i/tbl/csv}; 
+echo $i; 
+done;
