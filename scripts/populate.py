@@ -19,9 +19,6 @@ parser.add_argument('db_name', help="name of database that contains the empty TP
 args = parser.parse_args()
 ### ARGS ###
 
-def change_attribute(obj, attribute, value): 
-	obj.__dict__[attribute] = value
-
 ### MAIN ###
 def __main__():
 	# DEBUG
@@ -36,16 +33,27 @@ def __main__():
 	#runDbgen(args.scale)
 
 	# execute TBL2CSV 
-	runTbl2Csv(DBGEN.PATH,args.data_path)
+	#runTbl2Csv(DBGEN.PATH,args.data_path)
 
-	
+	# execute runDropConstraints 
+	runDropConstraints(args.db_name)
+
+	# execute runTruncate 
+	runTruncate(args.db_name)
+
+	# execute runLoad 
+	runLoad(args.data_path, args.db_name)
+
+	# execute runAddConstraints 
+	runAddConstraints(args.db_name)
+
 ### MAIN ###
 
 ### DBGEN ###
 # desc: function to execute the DBGEN program with the args passed
 # return: output of the STDOUT from the proess
 def runDbgen(scale):
-	print('runDbgen(): START')
+	print('runDbgen('+scale+'): START')
 
 	# create a new object instance of the DBGEN class
 	dbgen1 = DBGEN()
@@ -64,7 +72,7 @@ def runDbgen(scale):
 	#output = subprocess.run([dbgen1.LOCATION, dbgen1.ARGS], stdout=subprocess.PIPE, cwd="/srv/repo/DW-Tech-Challenge-1/TPCH/2.17.3/dbgen/")
 
 	print (output)
-	print('runDbgen(): END')
+	print('runDbgen('+scale+'): END')
 	
 ### DBGEN ###
 
@@ -72,7 +80,7 @@ def runDbgen(scale):
 # desc: function to transform TBL files to CSV file to be ready to load them into POSTGRES DB
 # return: list of files
 def runTbl2Csv(src,dst):
-	print('runTbl2Csv(): START')
+	print('runTbl2Csv('+src+','+dst+'): START')
 	# create a new object instance of the TBL2CSV class
 	tbl2csv1 = TBL2CSV()
 	# set the command 
@@ -85,41 +93,52 @@ def runTbl2Csv(src,dst):
 	output = p1.communicate()[0]
 	
 	print (output)
-	print('runTbl2Csv(): END')
+	print('runTbl2Csv('+src+','+dst+'): END')
 	
 ### TBL2CSV ###
 
-### runRemoveConstraint(database) ###
+### runDropConstraints(database) ###
 # desc: function to remove constraints
 # return: none
-def runRemoveConstraint(database):
-	print('runRemoveConstraint(): START')
-	print('runRemoveConstraint(): END')
-### runRemoveConstraint(database) ###
+def runDropConstraints(database):
+	print('runDropConstraints('+database+'): START')
+	# create a new object instance of the PSQL class
+	psql1 = PSQL()
+	# create a new object instance of the CONSTRAINT class
+	constraint1 = CONSTRAINT()
+	# set the command 
+	command = "sudo -u "+psql1.USER+" "+psql1.BIN+" -f "+constraint1.PATH+"/"+constraint1.BIN_DROP+" "+database
+	print(command)
+	# subprocess.run(args, *, stdin=None, input=None, stdout=None, stderr=None, shell=False, cwd=None, timeout=None, check=False, encoding=None, errors=None)
+	output = subprocess.run([command, database], stdout=subprocess.PIPE, cwd=constraint1.PATH)
+
+	print (output)
+	print('runDropConstraints('+database+'): END')
+### runDropConstraints(database) ###
 
 ### runTruncate(database) ###
 # desc: function to remove constraints
 # return: none
 def runTruncate(database):
-	print('runTruncate(): START')
-	print('runTruncate(): END')
+	print('runTruncate('+database+'): START')
+	print('runTruncate('+database+'): END')
 ### runTruncate(database) ###
 
-### runLoad(database) ###
-# desc: function to remove constraints
+### runLoad(data_path,database) ###
+# desc: function to Load CSV files from data_path  to database
 # return: none
-def runLoad(database):
-	print('runLoad(): START')
-	print('runLoad(): END')
+def runLoad(data_path,database):
+	print('runLoad('+data_path+','+database+'): START')
+	print('runLoad('+data_path+','+database+'): END')
 ### runLoad(database) ###
 
-### runAddConstraint(database) ###
+### runAddConstraints(database) ###
 # desc: function to remove constraints
 # return: none
-def runAddConstraint(database):
-	print('runAddConstraint(): START')
-	print('runAddConstraint(): END')
-### runAddConstraint(database) ###
+def runAddConstraints(database):
+	print('runAddConstraints('+database+'): START')
+	print('runAddConstraints('+database+'): END')
+### runAddConstraints(database) ###
 
 #### ADVANCED  / EXTRA FUNCTIONS ####
 
