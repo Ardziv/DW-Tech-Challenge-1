@@ -64,14 +64,16 @@ def runDbgen(scale):
 
 	# Set up the echo command and direct the output to a pipe
 	# subprocess.Popen(args, bufsize=-1, executable=None, stdin=None, stdout=None, stderr=None, preexec_fn=None, close_fds=True, shell=False, cwd=None, env=None, universal_newlines=False, startupinfo=None, creationflags=0, restore_signals=True, start_new_session=False, pass_fds=(), *, encoding=None, errors=None)
-	p1 = subprocess.Popen([command, "-vf", dbgen1.ARGS], stdout=subprocess.PIPE, cwd=dbgen1.PATH)
+	#p1 = subprocess.Popen([command, "-vf", dbgen1.ARGS], stdout=subprocess.PIPE, cwd=dbgen1.PATH)
 	# Run the command
-	output = p1.communicate()[0]
+	#output = p1.communicate()[0]
 
-	# subprocess.run(args, *, stdin=None, input=None, stdout=None, stderr=None, shell=False, cwd=None, timeout=None, check=False, encoding=None, errors=None)
-	#output = subprocess.run([dbgen1.LOCATION, dbgen1.ARGS], stdout=subprocess.PIPE, cwd="/srv/repo/DW-Tech-Challenge-1/TPCH/2.17.3/dbgen/")
+	# subprocess.check_output(args, *, stdin=None, stderr=None, shell=False, cwd=None, encoding=None, errors=None, universal_newlines=False, timeout=None)
+	try:
+		subprocess.check_output([command, "-v", "-f",  dbgen1.ARGS], cwd=dbgen1.PATH)
+	except subprocess.CalledProcessError as e:
+		print(str(e.output))
 
-	print (output)
 	print('runDbgen('+scale+'): END')
 	
 ### DBGEN ###
