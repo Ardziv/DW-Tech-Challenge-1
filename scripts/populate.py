@@ -30,10 +30,10 @@ def __main__():
 	# DEBUG
 
 	# execute DBGEN with the scale
-	#runDbgen(args.scale)
+	runDbgen(args.scale)
 
 	# execute TBL2CSV 
-	#runTbl2Csv(DBGEN.PATH,args.data_path)
+	runTbl2Csv(DBGEN.PATH,args.data_path)
 
 	# execute runDropConstraints 
 	runDropConstraints(args.db_name)
@@ -110,8 +110,7 @@ def runDropConstraints(database):
 	command = "sudo -u "+psql1.USER+" "+psql1.BIN+" -f "+constraint1.PATH+"/"+constraint1.BIN_DROP+" "+database
 	print(command)
 	# subprocess.run(args, *, stdin=None, input=None, stdout=None, stderr=None, shell=False, cwd=None, timeout=None, check=False, encoding=None, errors=None)
-	output = subprocess.run([command, database], stdout=subprocess.PIPE, cwd=constraint1.PATH)
-
+	output = subprocess.run([command], stdout=subprocess.PIPE, cwd=constraint1.PATH, shell=True)
 	print (output)
 	print('runDropConstraints('+database+'): END')
 ### runDropConstraints(database) ###
@@ -121,6 +120,16 @@ def runDropConstraints(database):
 # return: none
 def runTruncate(database):
 	print('runTruncate('+database+'): START')
+	# create a new object instance of the PSQL class
+	psql1 = PSQL()
+	# create a new object instance of the LOAD class
+	truncate1 = TRUNCATE()
+	# set the command 
+	command = "sudo -u "+psql1.USER+" "+psql1.BIN+" -f "+truncate1.PATH+"/"+truncate1.BIN+" "+database
+	print(command)
+	# subprocess.run(args, *, stdin=None, input=None, stdout=None, stderr=None, shell=False, cwd=None, timeout=None, check=False, encoding=None, errors=None)
+	output = subprocess.run([command], stdout=subprocess.PIPE, cwd=truncate1.PATH, shell=True)
+	print (output)
 	print('runTruncate('+database+'): END')
 ### runTruncate(database) ###
 
@@ -129,6 +138,16 @@ def runTruncate(database):
 # return: none
 def runLoad(data_path,database):
 	print('runLoad('+data_path+','+database+'): START')
+	# create a new object instance of the PSQL class
+	psql1 = PSQL()
+	# create a new object instance of the LOAD class
+	load1 = LOAD()
+	# set the command 
+	command = "sudo -u "+psql1.USER+" "+psql1.BIN+" -f "+load1.PATH+"/"+load1.BIN+" "+database
+	print(command)
+	# subprocess.run(args, *, stdin=None, input=None, stdout=None, stderr=None, shell=False, cwd=None, timeout=None, check=False, encoding=None, errors=None)
+	output = subprocess.run([command], stdout=subprocess.PIPE, cwd=load1.PATH, shell=True)
+	print (output)
 	print('runLoad('+data_path+','+database+'): END')
 ### runLoad(database) ###
 
@@ -137,6 +156,16 @@ def runLoad(data_path,database):
 # return: none
 def runAddConstraints(database):
 	print('runAddConstraints('+database+'): START')
+	# create a new object instance of the PSQL class
+	psql1 = PSQL()
+	# create a new object instance of the CONSTRAINT class
+	constraint1 = CONSTRAINT()
+	# set the command 
+	command = "sudo -u "+psql1.USER+" "+psql1.BIN+" -f "+constraint1.PATH+"/"+constraint1.BIN_ADD+" "+database
+	print(command)
+	# subprocess.run(args, *, stdin=None, input=None, stdout=None, stderr=None, shell=False, cwd=None, timeout=None, check=False, encoding=None, errors=None)
+	output = subprocess.run([command], stdout=subprocess.PIPE, cwd=constraint1.PATH, shell=True)
+	print (output)
 	print('runAddConstraints('+database+'): END')
 ### runAddConstraints(database) ###
 
