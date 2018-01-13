@@ -4,6 +4,9 @@ import argparse
 # subprocess
 import subprocess
 
+# import config.py
+from config import *
+
 # parser of arguments on command line
 parser = argparse.ArgumentParser()
 #ordered arguments
@@ -14,6 +17,10 @@ parser.add_argument('db_name', help="name of database that contains the empty TP
 # parse the args
 args = parser.parse_args()
 
+print(DBGEN.ARGS)
+print(PSQL.DATABASE)
+for i in PSQL.DATABASE_TABLES:
+	print (i)
 print(args)
 
 # Ask the user for input
