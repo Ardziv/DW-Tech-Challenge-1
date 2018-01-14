@@ -39,7 +39,7 @@
 ```sh
 # cd /srv/repo
 # git clone git@github.com:Ardziv/DW-Tech-Challenge-1.git
-#  ln -s /srv/repo/DW-Tech-Challenge-1/scripts /srv/scripts
+# ln -s /srv/repo/DW-Tech-Challenge-1/scripts /srv/scripts
 # ln -s /srv/repo/DW-Tech-Challenge-1/TPCH/2.17.3/dbgen /srv/dbgen
 ```
 
@@ -72,6 +72,8 @@ Write a Python/Ruby/Perl script named `populate` (extension dependent on languag
 
 1. Invoke dbgen with a specfied scale to create the TPC-H input datasets.
 
+First we build the tool dbgen that ships with TPCH
+
 ```sh
 cd /srv/dbgen
 cp makefile.suite makefile
@@ -96,14 +98,72 @@ As an example, the following will generate data at scale 1, store them inside th
 python populate.py 1 ./data tpch
 ```
 
-ANSWER: all of the above has been done in the script `populate.py`.
+#ANSWER: all of the above has been done in the script `populate.py`.
 it uses python 3.
 ```sh
 python3 populate.py 1 /srv/data tpch
 ```
 
-It get something like this as output:
+It has a helper for usage:
 ```
+root@tpch:/srv/scripts# python3 populate.py -h
+usage: populate.py [-h] scale data_path db_name
+
+positional arguments:
+  scale       integer value to be used when invoking dbgen
+  data_path   filesystem directory that will contain the files that qgen will
+              generate.
+  db_name     name of database that contains the empty TPC-H tables.
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
+It has to have the ordered args otherwise it is failing:
+```sh
+root@tpch:/srv/scripts# python3 populate.py
+usage: populate.py [-h] scale data_path db_name
+populate.py: error: the following arguments are required: scale, data_path, db_name
+```
+
+It get something like this as output:
+```sh
+root@tpch:/srv/scripts# python3 populate.py 1 /srv/data tpch
+TPC-H Population Generator (Version 2.17.3)
+Copyright Transaction Processing Performance Council 1994 - 2010
+Generating data for suppliers table/
+Preloading text ... 100%
+done.
+Generating data for customers tabledone.
+Generating data for orders/lineitem tablesdone.
+Generating data for part/partsupplier tablesdone.
+Generating data for nation tabledone.
+Generating data for region tabledone.
+
+runTbl2Csv(/srv/dbgen,/srv/data): START
+Converting file /srv/dbgen/customer.tbl
+Converting file /srv/dbgen/lineitem.tbl
+Converting file /srv/dbgen/nation.tbl
+Converting file /srv/dbgen/orders.tbl
+Converting file /srv/dbgen/part.tbl
+Converting file /srv/dbgen/partsupp.tbl
+Converting file /srv/dbgen/region.tbl
+Converting file /srv/dbgen/supplier.tbl
+
+runTbl2Csv(/srv/dbgen,/srv/data): END
+runDropConstraints(tpch): START
+CompletedProcess(args=['sudo -u postgres psql -f /srv/scripts/drop_constraints.sql tpch'], returncode=0, stdout='ALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\n')
+runDropConstraints(tpch): END
+runTruncate(tpch): START
+CompletedProcess(args=['sudo -u postgres psql -f /srv/scripts/truncate.sql tpch'], returncode=0, stdout='TRUNCATE TABLE\n count \n-------\n     0\n(1 row)\n\nTRUNCATE TABLE\n count \n-------\n     0\n(1 row)\n\nTRUNCATE TABLE\n count \n-------\n     0\n(1 row)\n\nTRUNCATE TABLE\n count \n-------\n     0\n(1 row)\n\nTRUNCATE TABLE\n count \n-------\n     0\n(1 row)\n\nTRUNCATE TABLE\n count \n-------\n     0\n(1 row)\n\nTRUNCATE TABLE\n count \n-------\n     0\n(1 row)\n\nTRUNCATE TABLE\n count \n-------\n     0\n(1 row)\n\n')
+runTruncate(tpch): END
+runLoad(/srv/data,tpch): START
+CompletedProcess(args=['sudo -u postgres psql -f /srv/scripts/load.sql tpch'], returncode=0, stdout='COPY 5\nCOPY 25\nCOPY 200000\nCOPY 10000\nCOPY 800000\nCOPY 1500000\nCOPY 6001215\nCOPY 150000\n')
+runLoad(/srv/data,tpch): END
+runAddConstraints(tpch): START
+sudo -u postgres psql -f /srv/scripts/add_constraints.sql tpch
+CompletedProcess(args=['sudo -u postgres psql -f /srv/scripts/add_constraints.sql tpch'], returncode=0, stdout='ALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\n')
+runAddConstraints(tpch): END
 ```
 
 ### Data verification
