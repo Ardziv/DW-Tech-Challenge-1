@@ -10,19 +10,19 @@
 
 ### Environment
 
-1- Create a EC2 T2.MICRO instance
+#### 1- Create a EC2 T2.MICRO instance
 
 1bis - Create a EC2 T2.MICRO instance with Ansible / Terraform / CloudFormation script with pre-configured Postgresql and Security Group
 
-2- Open Security Group port 22 to my local public IP
+#### 2- Open Security Group port 22 to my local public IP
 
-3- Connect with SSH to the EC2 instance
+#### 3- Connect with SSH to the EC2 instance
 
 ```sh
 # ssh -i <KEY.PEM> <DNS> -l root
 ```
 
-4- Quick configuration of the system:
+#### 4- Quick configuration of the system:
 
 ```sh
 # hostname tpch
@@ -32,9 +32,9 @@
 # ssh-keygen -t rsa
 ```
 
-5- ADD OWN SSH pub key to GITHUB
+#### 5- ADD OWN SSH pub key to GITHUB
 
-6- GIT clone repo & CONFIG SYMLINK IN /srv
+#### 6- GIT clone repo & CONFIG SYMLINK IN /srv
 
 ```sh
 # cd /srv/repo
@@ -43,14 +43,14 @@
 # ln -s /srv/repo/DW-Tech-Challenge-1/TPCH/2.17.3/dbgen /srv/dbgen
 ```
 
-7- SETUP POSTGRES
+#### 7- SETUP POSTGRES
 
 ```sh
 # /etc/init.d/postgres start
 # sudo passwd postgres
 ```
 
-8- CREATE DATABASE AND TABLES
+#### 8- CREATE DATABASE AND TABLES
 
 ```sh
 # su - postgres
@@ -98,7 +98,7 @@ As an example, the following will generate data at scale 1, store them inside th
 python populate.py 1 ./data tpch
 ```
 
-#ANSWER: all of the above has been done in the script `populate.py`.
+# ANSWER: all of the above has been done in the script `populate.py`.
 it uses python 3.
 ```sh
 python3 populate.py 1 /srv/data tpch
@@ -174,7 +174,7 @@ More details on what I have done are show here below:
 # /srv/scripts/tbl2csv.sh /srv/dbgen /srv/data
 ```
 
-10- LOAD CSV FILES
+#### 10- LOAD CSV FILES
 
 ```sh
  postgres@tpch:/srv/scripts$ psql -f load.sql tpch
@@ -188,7 +188,7 @@ COPY 1500000
 COPY 6001215
 ```
 
-11- MODIFY AND APPLY CONSTRAINT SCRIPT DSS.RI AND SAVE IT AS /srv/scripts/apply_constraints.sql
+#### 11- MODIFY AND APPLY CONSTRAINT SCRIPT DSS.RI AND SAVE IT AS /srv/scripts/apply_constraints.sql
 
 ```sh
 # cp /srv/dbgen/dss.ri /srv/scripts/apply_constraints.sql
@@ -226,7 +226,7 @@ ALTER TABLE
 ```
  
 
-12- DROP CONSTRAINTS AND TRUNCATE TABLE PRIOR RELOAD
+#### 12- DROP CONSTRAINTS AND TRUNCATE TABLE PRIOR RELOAD
 
 ```sh
 root@tpch:/srv/scripts# cat drop_constraints.sql
@@ -272,7 +272,7 @@ SELECT COUNT(*) FROM SUPPLIER;
 ```
  
 
-13 - RELOAD ALGORITHM
+#### 13- RELOAD ALGORITHM
 
 Main algo for the populate.py script is as per below:
 
@@ -285,7 +285,7 @@ psql -f load.sql  tpch
 psql -f add_contraints.sql tpch
 ```
 
-14- Create populate.py script
+#### 14- Create populate.py script
 
 On GIT repo:
 
