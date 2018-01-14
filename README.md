@@ -374,7 +374,7 @@ Points, too, if you can provide a few more queries outside of the TPC-H set that
 
 #### ANSWER: I noticed during the compilation of the TPCH dbgen binary that there were as well a too called "qgen" which seems to stands for "query generator".
 I have wrote a script to generate the template queries provided with the TPCH toolkit.
-The results queries are available on GIT repo in the folder .../dbgen/finals/q1.sql - q17.sql
+The results queries are available on GIT repo in the folder .../dbgen/finals/1.sql - 22.sql
 
 ```sh
 root@tpch:/srv/dbgen# ls finals/
