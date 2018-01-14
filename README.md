@@ -407,6 +407,20 @@ The Ideal architecture shall have the following key components to be solid and s
 
 TPC-H tables are in 3NF. Provide a second set of tables in the dimensional model and the transformational logic to populate them. We shall award points even if this item is incomplete but clearly shows the beginnings of a viable solution.
 
+#### ANSWER: based on the existing dimensions and facts tables available, and after looking at their data, i would suggest to develop a few more dimensions to help the business:
+- Dimension: "promotion / fidelity": a dimension to track and analyse the behavior of the customer. it can be populated with following information:
+	* customer_bought_this_alraedy: yes/no
+	* does the customer buy more because product has more discount?
+	* which supplier has a small discount? 
+	* what is the average time betwen two orders from same customer?
+- Dimension: "bestseller": a fact/dimension to track the most selled item and what changed
+	* which product has higher unit sold?
+	* how much net profit / net margins every month?
+	* did we do some campaign to sell more of this product?
+- Dimension: "bestprofit": a fact/dimension to track the proucts generating the most profit 
+	* which product has higher margins?
+	* how many of them are sold every month?
+	* did we do some campaign to sell more of this product?
 ### Extra queries
 
 Points, too, if you can provide a few more queries outside of the TPC-H set that demonstrate your understanding of the schema and its data.
