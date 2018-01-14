@@ -95,7 +95,7 @@ make
     * `scale` -- integer value to be used when invoking dbgen
     * `data_path` -- filesystem directory that will contain the files that qgen will generate. Should fail if the destination is not empty. Create if it doesn't exist.
     * `db_name` -- name of database that contains the empty TPC-H tables.
-	** ANSWER: I use the module "argparse" and some extra checking functions to make sure that the arguments are existing and are of the proper type (scale: int, data_path: existing directory). I raise an error otherwise.
+	* ANSWER: I use the module "argparse" and some extra checking functions to make sure that the arguments are existing and are of the proper type (scale: int, data_path: existing directory). I raise an error otherwise.
         
 As an example, the following will generate data at scale 1, store them inside the directory `data` and load into the database `tpch`.
 
