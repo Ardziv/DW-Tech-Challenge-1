@@ -166,7 +166,7 @@ def runTruncate(database):
 	print('runTruncate('+database+'): START')
 	# create a new object instance of the PSQL class
 	psql1 = PSQL()
-	# create a new object instance of the LOAD class
+	# create a new object instance of the TRUNCATE class
 	truncate1 = TRUNCATE()
 	# set the command 
 	command = "sudo -u "+psql1.USER+" "+psql1.BIN+" -f "+truncate1.PATH+"/"+truncate1.BIN+" "+database
