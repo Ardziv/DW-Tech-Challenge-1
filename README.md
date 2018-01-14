@@ -203,10 +203,10 @@ COPY 6001215
 
 Modify the constraint script /srv/scripts/apply_constraints.sql:
 
-(1) Remove "CONNECT TO TPCD;"
-(2) remove the object before the "TPCD."
-(3) remove the foreign key name
-(4) remove the "COMMIT WORK;"
+1. Remove "CONNECT TO TPCD;"
+1. remove the object before the "TPCD."
+1. remove the foreign key name
+1. remove the "COMMIT WORK;"
 
 ```sh
 # su - postgres
