@@ -166,6 +166,129 @@ CompletedProcess(args=['sudo -u postgres psql -f /srv/scripts/add_constraints.sq
 runAddConstraints(tpch): END
 ```
 
+More details on what I have done are show here below:
+9- CREATE CSV FROM TBL FILES
+
+# /srv/scripts/tbl2csv.sh /srv/dbgen /srv/data
+
+
+10- LOAD CSV FILES
+
+```sh
+ postgres@tpch:/srv/scripts$ psql -f load.sql tpch
+COPY 25
+COPY 5
+COPY 200000
+COPY 10000
+COPY 800000
+COPY 150000
+COPY 1500000
+COPY 6001215
+```
+
+11- MODIFY AND APPLY CONSTRAINT SCRIPT DSS.RI AND SAVE IT AS /srv/scripts/apply_constraints.sql
+
+```sh
+# cp /srv/dbgen/dss.ri /srv/scripts/apply_constraints.sql
+# vim /srv/scripts/apply_constraints.sql
+```
+
+Modify the constraint script /srv/scripts/apply_constraints.sql:
+
+(1) Remove "CONNECT TO TPCD;"
+(2) remove the object before the "TPCD."
+(3) remove the foreign key name
+(4) remove the "COMMIT WORK;"
+
+```sh
+# su - postgres
+# psql -f /srv/scripts/apply_constraints.sql tpch
+
+postgres@tpch:/srv/dbgen$ psql -f /srv/scripts/apply_constraints.sql tpch
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE 
+```
+ 
+
+12- DROP CONSTRAINTS AND TRUNCATE TABLE PRIOR RELOAD
+
+```sh
+root@tpch:/srv/scripts# cat drop_constraints.sql
+-- FOREIGN KEYS
+ALTER TABLE NATION DROP CONSTRAINT nation_n_regionkey_fkey;
+ALTER TABLE SUPPLIER DROP CONSTRAINT supplier_s_nationkey_fkey;
+ALTER TABLE CUSTOMER DROP CONSTRAINT customer_c_nationkey_fkey;
+ALTER TABLE PARTSUPP DROP CONSTRAINT partsupp_ps_suppkey_fkey;
+ALTER TABLE PARTSUPP DROP CONSTRAINT partsupp_ps_partkey_fkey;
+ALTER TABLE ORDERS DROP CONSTRAINT orders_o_custkey_fkey;
+ALTER TABLE LINEITEM DROP CONSTRAINT lineitem_l_orderkey_fkey;
+ALTER TABLE LINEITEM DROP CONSTRAINT lineitem_l_partkey_fkey;
+
+-- PRIMARY KEYS
+ALTER TABLE REGION DROP CONSTRAINT REGION_PKEY CASCADE;
+ALTER TABLE NATION DROP CONSTRAINT NATION_PKEY CASCADE;
+ALTER TABLE PART DROP CONSTRAINT PART_PKEY CASCADE;
+ALTER TABLE SUPPLIER DROP CONSTRAINT SUPPLIER_PKEY CASCADE;
+ALTER TABLE PARTSUPP DROP CONSTRAINT PARTSUPP_PKEY CASCADE;
+ALTER TABLE ORDERS DROP CONSTRAINT ORDERS_PKEY CASCADE;
+ALTER TABLE LINEITEM DROP CONSTRAINT LINEITEM_PKEY CASCADE;
+ALTER TABLE CUSTOMER DROP CONSTRAINT CUSTOMER_PKEY CASCADE;
+
+truncate.sql:
+
+TRUNCATE TABLE CUSTOMER CASCADE;
+SELECT COUNT(*) FROM CUSTOMER;
+TRUNCATE TABLE LINEITEM CASCADE;
+SELECT COUNT(*) FROM LINEITEM;
+TRUNCATE TABLE NATION CASCADE;
+SELECT COUNT(*) FROM NATION;
+TRUNCATE TABLE ORDERS CASCADE;
+SELECT COUNT(*) FROM ORDERS;
+TRUNCATE TABLE PART CASCADE;
+SELECT COUNT(*) FROM PART;
+TRUNCATE TABLE PARTSUPP CASCADE;
+SELECT COUNT(*) FROM PARTSUPP;
+TRUNCATE TABLE REGION CASCADE;
+SELECT COUNT(*) FROM REGION;
+TRUNCATE TABLE SUPPLIER CASCADE;
+SELECT COUNT(*) FROM SUPPLIER;
+
+```
+ 
+
+13 - RELOAD ALGORITHM
+
+Main algo for the populate.py script is as per below:
+
+```sh
+dbgen -s 1
+tbl2csv.sh /srv/dbgen /srv/data
+psql -f drop_constraints.sql tpch
+psql -f truncate.sql tpch
+psql -f load.sql  tpch
+psql -f add_contraints.sql tpch
+```
+
+14- Create populate.py script
+
+On GIT repo:
+
+https://github.com/Ardziv/DW-Tech-Challenge-1/blob/master/scripts/populate.py
+
 ### Data verification
 
 
