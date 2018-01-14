@@ -364,6 +364,45 @@ https://github.com/Ardziv/DW-Tech-Challenge-1/blob/master/scripts/check_distribu
 
 Since there's a limitation on what services you can use under the free tier, please think of an ideal architecture for handling petabytes of data (end to end; all the way from data ingestion to loading it in a queryable service) and document it in your README.
 
+#### ANSWER: I will propose here two possible "Ideal scenarios" with their respective architecture.
+The Ideal architecture shall have the following key components to be solid and scalable:
+1. ETL stack
+1. Big Data / Large Storage / Data Warehouse
+1. Query language
+1. Visualization tool easily accesible
+
+##### Scenario 1: Full AWS Stack (pros: well integrated with AWS, cons: vendor lockdown with ONLY AWS, difficult to move to other Cloud providers)
+1. ETL stack
+	* AWS GLUE:  AWS Glue is a fully managed ETL (extract, transform, and load) service that makes it simple and cost-effective to categorize your data, clean it, enrich it, and move it reliably between various data stores. 
+1. Big Data / Large Storage / Data Warehouse
+	* Amazon S3: to store the raw data into S3 buckets. these buckets can then be send through AWS GLUE to Kinetics Analytics for analysis
+1. Query language
+	* AWS ATHENA: query language to search on processed data stored on S3.
+1. Visualization tool easily accesible
+	* AWS QuickSight: Dashboard / reporting and visualization tool
+
+##### Scenario 2: Full OpenSource Stack (pros: freedom to run anywhere, cons: N/A)
+1. Real Time Data Feed
+	* Apache KAFKA
+	* LogStach
+1. ETL stack
+
+1. Big Data / Large Storage / Data Warehouse
+	* Apache Hadoop
+	* Apache Cassandra
+	* Apache Hive
+	* ELK
+1. Query language
+	* Apache Hive
+	* Elastic Search
+	* R
+	* Python
+	* Scala
+1. Visualization tool easily accesible
+	* QlickView: 
+	* Tableau
+	* Kibana
+
 ### Star schema
 
 TPC-H tables are in 3NF. Provide a second set of tables in the dimensional model and the transformational logic to populate them. We shall award points even if this item is incomplete but clearly shows the beginnings of a viable solution.
