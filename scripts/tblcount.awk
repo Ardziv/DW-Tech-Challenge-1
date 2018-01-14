@@ -1,7 +1,2 @@
-BEGIN { 
-	arr[$7]++
-} 
-END {
-	for(i in arr) 
-		print i,arr[i]
-}
+#!/usr/bin/awk -f
+{arr[$field_pos]++} END {for(i in arr) print i,arr[i]}
