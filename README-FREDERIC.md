@@ -10,39 +10,62 @@
 
 ### Environment
 
-I will setup a RedShift (RDS)
-I have used "ansible-vault" to secure my credentials to the AWS account.
+1- Create a EC2 T2.MICRO instance
 
-The prerequisites of my code are:
-1. boto (pip install boto).
-1. ansible-vault 
+1bis - Create a EC2 T2.MICRO instance with Ansible / Terraform / CloudFormation script with pre-configured Postgresql and Security Group
 
-I have used the following Ansible code to provision my instance:
+2- Open Security Group port 22 to my local public IP
 
+3- Connect with SSH to the EC2 instance
 
 ```sh
-# tpch_setup.yml
-
-- hosts: localhost
-  connection: local
-  gather_facts: False
-
-  tasks:
-
-    - name: Provision a set of instances
-      ec2:
-         key_name: my_key
-         group: test
-         instance_type: t2.micro
-         image: "{{ ami_id }}"
-         wait: true
-         exact_count: 5
-         count_tag:
-            Name: Demo
-         instance_tags:
-            Name: Demo
-      register: ec2
+# ssh -i <KEY.PEM> <DNS> -l root
 ```
+
+4- Quick configuration of the system:
+
+```sh
+# hostname tpch
+# echo tpch > /etc/hostname
+# apt-get install build-essential make gcc screen vim git
+# mkdir -p  /srv/repo
+# ssh-keygen -t rsa
+```
+
+5- ADD OWN SSH pub key to GITHUB
+
+6- GIT clone repo & CONFIG SYMLINK IN /srv
+
+```sh
+# cd /srv/repo
+# git clone git@github.com:Ardziv/DW-Tech-Challenge-1.git
+#  ln -s /srv/repo/DW-Tech-Challenge-1/scripts /srv/scripts
+# ln -s /srv/repo/DW-Tech-Challenge-1/TPCH/2.17.3/dbgen /srv/dbgen
+```
+
+7- SETUP POSTGRES
+
+```sh
+# /etc/init.d/postgres start
+# sudo passwd postgres
+```
+
+8- CREATE DATABASE AND TABLES
+
+```sh
+# su - postgres
+postgres# createdb tpch
+postgres@tpch:/srv/dbgen$ psql -f dss.ddl tpch
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+```
+
 
 ### Data generation and loading
 Write a Python/Ruby/Perl script named `populate` (extension dependent on language) that will:
@@ -50,8 +73,13 @@ Write a Python/Ruby/Perl script named `populate` (extension dependent on languag
 1. Invoke dbgen with a specfied scale to create the TPC-H input datasets.
 
 ```sh
-cd 2.1
-cp makefile.basis Makefile
+cd /srv/dbgen
+cp makefile.suite makefile
+EDIT variables in makefile:
+	CC      =  gcc
+	DATABASE= SQLSERVER
+	MACHINE = LINUX
+	WORKLOAD = TPCH
 make
 ```
 
@@ -66,6 +94,16 @@ As an example, the following will generate data at scale 1, store them inside th
 
 ```sh
 python populate.py 1 ./data tpch
+```
+
+ANSWER: all of the above has been done in the script `populate.py`.
+it uses python 3.
+```sh
+python3 populate.py 1 /srv/data tpch
+```
+
+It get something like this as output:
+```
 ```
 
 ### Data verification
