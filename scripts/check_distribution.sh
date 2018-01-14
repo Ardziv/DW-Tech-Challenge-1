@@ -27,6 +27,7 @@ SORT='/usr/bin/sort'
 CAT='/bin/cat'
 PSQL='/usr/bin/psql'
 SUDO='/usr/bin/sudo'
+GREP='/bin/grep'
 
 PATH=$1
 FILENAME=$2
@@ -108,17 +109,24 @@ COLNAME=$6
 
 ### MAIN
 ## COUNT & GROUP AGGREGATES ON TBL FILE
-${AWK} -F "|" -f /srv/scripts/tblcount.awk -v field_pos="7" /srv/dbgen/customer.tbl | ${SORT} -n -k1 > t1
-for i in `${CAT} t1`; do
-	echo $i
-done
+${AWK} -F "|" -f /srv/scripts/tblcount.awk -v field_pos="$FIELDPOS" ${PATH}/${FILENAME} | ${SORT} -n -k1 > /srv/scripts/t1
 ## COUNT & GROUP AGGREGATES ON TBL FILE
 
 ## TABLE SQL COUNT
 echo "select $COLNAME, count(*)
 from $TBNAME
 group by $COLNAME
-order by $COLNAME" > tblcount.sql
-${SUDO} -u postgres ${PSQL} -f tblcount.sql ${DBNAME}
+order by $COLNAME" > /srv/scripts/tblcount.sql
+${SUDO} -u postgres ${PSQL} -f /srv/scripts/tblcount.sql ${DBNAME} -t > /srv/scripts/t2
 ## TABLE SQL COUNT
 
+## DISPLAY
+for i in `${AWK} '{print $1}' /srv/scripts/t1`; do   
+	RESULT=`echo -n $i`; 
+	RESULT+=`${GREP} $i /srv/scripts/t1 | ${AWK} '{ print " "$2}'` ; 
+	RESULT+=`${GREP} $i /srv/scripts/t2 | ${AWK} -F "|" '{print " "$2'}`; 
+	echo $RESULT; 
+done
+## DISPLAY
+
+#EOF
