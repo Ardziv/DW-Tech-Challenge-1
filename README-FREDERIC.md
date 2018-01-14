@@ -340,6 +340,16 @@ Write a Linux shell script named `check_distribution.sh` that will compare count
     HOUSEHOLD 30189 30189
     MACHINERY 29949 29949
 ```
+#### ANSWER: all of the above has been done and the script output is as per below:
+
+```sh
+root@tpch:/srv/scripts# ./check_distribution.sh /srv/dbgen customer.tbl 7 tpch customer c_mktsegment
+AUTOMOBILE 29752 29752
+BUILDING 30142 30142
+FURNITURE 29968 29968
+HOUSEHOLD 30189 30189
+MACHINERY 29949 29949
+```
 
 ### Ideal architecture
 
