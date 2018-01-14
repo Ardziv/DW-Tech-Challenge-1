@@ -1,18 +1,51 @@
+# os, stat , errno
+import os, stat, errno
 # argparse
 import argparse
-
 # subprocess
 import subprocess
+import shlex
 
 # import config.py
 from config import *
 
 ### ARGS ###
+def intNotNull(string):
+	try:
+		val = int(string)
+		if val > 0:
+			return string
+		else:
+			msg = "%r can't be null, zero or negative, try again" % string
+			raise argparse.ArgumentTypeError(msg)
+	except ValueError:
+		msg = "ERROR: %r  - scale must be a number, try again" % string
+		print(msg)
+
+def CheckIsDir(directory):
+	try:
+		return stat.S_ISDIR(os.stat(directory).st_mode)
+	except OSError as e:
+		if e.errno == errno.ENOENT:
+			return False
+		raise
+
+def dirExists(string):
+	try:
+		if CheckIsDir(string):
+			return string
+		else:
+			msg = "%r doesn't exists" % string
+			raise argparse.ArgumentTypeError(msg)
+	except ValueError:
+		msg = "ERROR: %r  - data_path must be a valid directory, try again" % string
+		print(msg)
+
 # parser of arguments on command line
 parser = argparse.ArgumentParser()
 #ordered arguments
-parser.add_argument('scale', help="integer value to be used when invoking dbgen")
-parser.add_argument('data_path', help="filesystem directory that will contain the files that qgen will generate.")
+parser.add_argument('scale', type=intNotNull, help="integer value to be used when invoking dbgen")
+parser.add_argument('data_path', type=dirExists, help="filesystem directory that will contain the files that qgen will generate.")
 parser.add_argument('db_name', help="name of database that contains the empty TPC-H tables.")
 
 # parse the args
@@ -30,22 +63,22 @@ def __main__():
 	# DEBUG
 
 	# execute DBGEN with the scale
-	runDbgen(args.scale)
+	#runDbgen(args.scale)
 
 	# execute TBL2CSV 
 	runTbl2Csv(DBGEN.PATH,args.data_path)
 
 	# execute runDropConstraints 
-	runDropConstraints(args.db_name)
+	#runDropConstraints(args.db_name)
 
 	# execute runTruncate 
-	runTruncate(args.db_name)
+	#runTruncate(args.db_name)
 
 	# execute runLoad 
-	runLoad(args.data_path, args.db_name)
+	#runLoad(args.data_path, args.db_name)
 
 	# execute runAddConstraints 
-	runAddConstraints(args.db_name)
+	#runAddConstraints(args.db_name)
 
 ### MAIN ###
 
@@ -60,19 +93,18 @@ def runDbgen(scale):
 	# set the dbgen.ARGS to the value provided
 	dbgen1.ARGS += scale
 	# set the command 
-	command = dbgen1.PATH+"/"+dbgen1.BIN
-
-	# Set up the echo command and direct the output to a pipe
-	# subprocess.Popen(args, bufsize=-1, executable=None, stdin=None, stdout=None, stderr=None, preexec_fn=None, close_fds=True, shell=False, cwd=None, env=None, universal_newlines=False, startupinfo=None, creationflags=0, restore_signals=True, start_new_session=False, pass_fds=(), *, encoding=None, errors=None)
-	#p1 = subprocess.Popen([command, "-vf", dbgen1.ARGS], stdout=subprocess.PIPE, cwd=dbgen1.PATH)
-	# Run the command
-	#output = p1.communicate()[0]
+	command = dbgen1.PATH+"/"+dbgen1.BIN+" -v -f "+dbgen1.ARGS
+	command = shlex.split(command)
 
 	# subprocess.check_output(args, *, stdin=None, stderr=None, shell=False, cwd=None, encoding=None, errors=None, universal_newlines=False, timeout=None)
 	try:
-		subprocess.check_output([command, "-v", "-f",  dbgen1.ARGS], cwd=dbgen1.PATH)
+		output = subprocess.check_output(command, cwd=dbgen1.PATH)
+		success = True
 	except subprocess.CalledProcessError as e:
-		print(str(e.output))
+		print('Handling run-time error:', e)
+		output = e.output.decode()
+		success = False
+		raise e
 
 	print('runDbgen('+scale+'): END')
 	
@@ -86,15 +118,19 @@ def runTbl2Csv(src,dst):
 	# create a new object instance of the TBL2CSV class
 	tbl2csv1 = TBL2CSV()
 	# set the command 
-	command = tbl2csv1.PATH+"/"+tbl2csv1.BIN
+	command = tbl2csv1.PATH+"/"+tbl2csv1.BIN+" "+src+" "+dst
+	command = shlex.split(command)
 
-	# Set up the echo command and direct the output to a pipe
-	# subprocess.Popen(args, bufsize=-1, executable=None, stdin=None, stdout=None, stderr=None, preexec_fn=None, close_fds=True, shell=False, cwd=None, env=None, universal_newlines=False, startupinfo=None, creationflags=0, restore_signals=True, start_new_session=False, pass_fds=(), *, encoding=None, errors=None)
-	p1 = subprocess.Popen([command, src, dst], stdout=subprocess.PIPE, cwd=tbl2csv1.PATH)
-	# Run the command
-	output = p1.communicate()[0]
-	
-	print (output)
+	# subprocess.check_output(args, *, stdin=None, stderr=None, shell=False, cwd=None, encoding=None, errors=None, universal_newlines=False, timeout=None)
+	try:
+		output = subprocess.check_output(command, cwd=tbl2csv1.PATH)
+		success = True
+	except subprocess.CalledProcessError as e:
+		print('Handling run-time error:', e)
+		output = e.output.decode()
+		success = False
+		raise e
+
 	print('runTbl2Csv('+src+','+dst+'): END')
 	
 ### TBL2CSV ###

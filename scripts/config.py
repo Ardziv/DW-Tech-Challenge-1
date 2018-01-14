@@ -9,7 +9,7 @@ class PSQL:
 class DBGEN:
 	PATH = '/srv/dbgen'
 	BIN = 'dbgen'
-	ARGS = '-s '
+	ARGS = '-s'
 
 class TBL2CSV:
 	PATH = '/srv/scripts'
