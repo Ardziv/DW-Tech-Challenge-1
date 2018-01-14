@@ -4,9 +4,8 @@ SRCPATH=$1
 DSTPATH=$2
 
 for i in ${SRCPATH}/*.tbl; do 
-		echo $i; 
 		[ -f "$i" ] || exit 1
+		echo "Converting file "$i; 
 		j=`basename $i`
-		echo $j
 		sed 's/|$//' $i > ${DSTPATH}/${j/tbl/csv}; 
 done;

@@ -66,19 +66,19 @@ def __main__():
 	#runDbgen(args.scale)
 
 	# execute TBL2CSV 
-	runTbl2Csv(DBGEN.PATH,args.data_path)
+	#runTbl2Csv(DBGEN.PATH,args.data_path)
 
 	# execute runDropConstraints 
-	#runDropConstraints(args.db_name)
+	runDropConstraints(args.db_name)
 
 	# execute runTruncate 
-	#runTruncate(args.db_name)
+	runTruncate(args.db_name)
 
 	# execute runLoad 
-	#runLoad(args.data_path, args.db_name)
+	runLoad(args.data_path, args.db_name)
 
 	# execute runAddConstraints 
-	#runAddConstraints(args.db_name)
+	runAddConstraints(args.db_name)
 
 ### MAIN ###
 
@@ -102,7 +102,6 @@ def runDbgen(scale):
 		success = True
 	except subprocess.CalledProcessError as e:
 		print('Handling run-time error:', e)
-		output = e.output.decode()
 		success = False
 		raise e
 
@@ -123,11 +122,11 @@ def runTbl2Csv(src,dst):
 
 	# subprocess.check_output(args, *, stdin=None, stderr=None, shell=False, cwd=None, encoding=None, errors=None, universal_newlines=False, timeout=None)
 	try:
-		output = subprocess.check_output(command, cwd=tbl2csv1.PATH)
+		output = subprocess.check_output(command, cwd=tbl2csv1.PATH,universal_newlines=True)
+		print(output)
 		success = True
 	except subprocess.CalledProcessError as e:
 		print('Handling run-time error:', e)
-		output = e.output.decode()
 		success = False
 		raise e
 
@@ -146,10 +145,17 @@ def runDropConstraints(database):
 	constraint1 = CONSTRAINT()
 	# set the command 
 	command = "sudo -u "+psql1.USER+" "+psql1.BIN+" -f "+constraint1.PATH+"/"+constraint1.BIN_DROP+" "+database
-	print(command)
+
 	# subprocess.run(args, *, stdin=None, input=None, stdout=None, stderr=None, shell=False, cwd=None, timeout=None, check=False, encoding=None, errors=None)
-	output = subprocess.run([command], stdout=subprocess.PIPE, cwd=constraint1.PATH, shell=True)
-	print (output)
+	try:
+		output = subprocess.run([command], stdout=subprocess.PIPE, cwd=constraint1.PATH,universal_newlines=True, shell=True)
+		print (output)
+		success = True
+	except subprocess.CalledProcessError as e:
+		print('Handling run-time error:', e)
+		success = False
+		raise e
+
 	print('runDropConstraints('+database+'): END')
 ### runDropConstraints(database) ###
 
@@ -164,10 +170,17 @@ def runTruncate(database):
 	truncate1 = TRUNCATE()
 	# set the command 
 	command = "sudo -u "+psql1.USER+" "+psql1.BIN+" -f "+truncate1.PATH+"/"+truncate1.BIN+" "+database
-	print(command)
+
 	# subprocess.run(args, *, stdin=None, input=None, stdout=None, stderr=None, shell=False, cwd=None, timeout=None, check=False, encoding=None, errors=None)
-	output = subprocess.run([command], stdout=subprocess.PIPE, cwd=truncate1.PATH, shell=True)
-	print (output)
+	try:
+		output = subprocess.run([command], stdout=subprocess.PIPE, cwd=truncate1.PATH,universal_newlines=True, shell=True)
+		print (output)
+		success = True
+	except subprocess.CalledProcessError as e:
+		print('Handling run-time error:', e)
+		success = False
+		raise e
+
 	print('runTruncate('+database+'): END')
 ### runTruncate(database) ###
 
@@ -182,10 +195,17 @@ def runLoad(data_path,database):
 	load1 = LOAD()
 	# set the command 
 	command = "sudo -u "+psql1.USER+" "+psql1.BIN+" -f "+load1.PATH+"/"+load1.BIN+" "+database
-	print(command)
+
 	# subprocess.run(args, *, stdin=None, input=None, stdout=None, stderr=None, shell=False, cwd=None, timeout=None, check=False, encoding=None, errors=None)
-	output = subprocess.run([command], stdout=subprocess.PIPE, cwd=load1.PATH, shell=True)
-	print (output)
+	try:
+		output = subprocess.run([command], stdout=subprocess.PIPE, cwd=load1.PATH,universal_newlines=True, shell=True)
+		print (output)
+		success = True
+	except subprocess.CalledProcessError as e:
+		print('Handling run-time error:', e)
+		success = False
+		raise e
+
 	print('runLoad('+data_path+','+database+'): END')
 ### runLoad(database) ###
 
@@ -202,8 +222,15 @@ def runAddConstraints(database):
 	command = "sudo -u "+psql1.USER+" "+psql1.BIN+" -f "+constraint1.PATH+"/"+constraint1.BIN_ADD+" "+database
 	print(command)
 	# subprocess.run(args, *, stdin=None, input=None, stdout=None, stderr=None, shell=False, cwd=None, timeout=None, check=False, encoding=None, errors=None)
-	output = subprocess.run([command], stdout=subprocess.PIPE, cwd=constraint1.PATH, shell=True)
-	print (output)
+	try:
+		output = subprocess.run([command], stdout=subprocess.PIPE, cwd=constraint1.PATH,universal_newlines=True, shell=True)
+		print (output)
+		success = True
+	except subprocess.CalledProcessError as e:
+		print('Handling run-time error:', e)
+		success = False
+		raise e
+
 	print('runAddConstraints('+database+'): END')
 ### runAddConstraints(database) ###
 
