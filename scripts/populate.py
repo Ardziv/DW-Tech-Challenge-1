@@ -84,7 +84,7 @@ def __main__():
 
 ### DBGEN ###
 # desc: function to execute the DBGEN program with the args passed
-# return: output of the STDOUT from the proess
+# return: output of the subprocess's STDOUT
 def runDbgen(scale):
 	print('runDbgen('+scale+'): START')
 
@@ -111,7 +111,7 @@ def runDbgen(scale):
 
 ### TBL2CSV ###
 # desc: function to transform TBL files to CSV file to be ready to load them into POSTGRES DB
-# return: list of files
+# return: output of the subprocess's STDOUT
 def runTbl2Csv(src,dst):
 	print('runTbl2Csv('+src+','+dst+'): START')
 	# create a new object instance of the TBL2CSV class
@@ -136,7 +136,7 @@ def runTbl2Csv(src,dst):
 
 ### runDropConstraints(database) ###
 # desc: function to remove constraints
-# return: none
+# return: output of the subprocess's STDOUT
 def runDropConstraints(database):
 	print('runDropConstraints('+database+'): START')
 	# create a new object instance of the PSQL class
@@ -161,7 +161,7 @@ def runDropConstraints(database):
 
 ### runTruncate(database) ###
 # desc: function to remove constraints
-# return: none
+# return: output of the subprocess's STDOUT
 def runTruncate(database):
 	print('runTruncate('+database+'): START')
 	# create a new object instance of the PSQL class
@@ -186,7 +186,7 @@ def runTruncate(database):
 
 ### runLoad(data_path,database) ###
 # desc: function to Load CSV files from data_path  to database
-# return: none
+# return: output of the subprocess's STDOUT
 def runLoad(data_path,database):
 	print('runLoad('+data_path+','+database+'): START')
 	# create a new object instance of the PSQL class
@@ -211,7 +211,7 @@ def runLoad(data_path,database):
 
 ### runAddConstraints(database) ###
 # desc: function to remove constraints
-# return: none
+# return: output of the subprocess's STDOUT
 def runAddConstraints(database):
 	print('runAddConstraints('+database+'): START')
 	# create a new object instance of the PSQL class
@@ -233,34 +233,5 @@ def runAddConstraints(database):
 
 	print('runAddConstraints('+database+'): END')
 ### runAddConstraints(database) ###
-
-#### ADVANCED  / EXTRA FUNCTIONS ####
-
-### LIST FILES ###
-# desc: function to list the generated TBL files
-# return: array/list of files
-def getDbgenFiles():
-	print('getDbgenFiles')
-### LIST FILES ###
-
-### TRUNCATE  TABLE ###
-def truncateTable(database,table):
-	print('getDbgenFiles')
-### LIST FILES ###
-### TRUNCATE  TABLE ###
-
-# EXAMPLE OF SUBPROCESS
-# Ask the user for input
-#host = raw_input("Enter a host to ping: ")    
-#host = 'localhost'
-
-# Set up the echo command and direct the output to a pipe
-#p1 = subprocess.Popen(['ping', '-c 2', host], stdout=subprocess.PIPE)
-
-# Run the command
-#output = p1.communicate()[0]
-
-#print (output)
-# EXAMPLE OF SUBPROCESS
 
 __main__()
