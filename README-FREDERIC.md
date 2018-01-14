@@ -169,8 +169,9 @@ runAddConstraints(tpch): END
 More details on what I have done are show here below:
 9- CREATE CSV FROM TBL FILES
 
+```sh
 # /srv/scripts/tbl2csv.sh /srv/dbgen /srv/data
-
+```
 
 10- LOAD CSV FILES
 
