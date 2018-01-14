@@ -371,3 +371,19 @@ TPC-H tables are in 3NF. Provide a second set of tables in the dimensional model
 ### Extra queries
 
 Points, too, if you can provide a few more queries outside of the TPC-H set that demonstrate your understanding of the schema and its data.
+
+#### ANSWER: I noticed during the compilation of the TPCH dbgen binary that there were as well a too called "qgen" which seems to stands for "query generator".
+I have wrote a script to generate the template queries provided with the TPCH toolkit.
+The results queries are available on GIT repo in the folder .../dbgen/finals/q1.sql - q17.sql
+
+```sh
+root@tpch:/srv/dbgen# ls finals/
+1.sql  10.sql  11.sql  12.sql  13.sql  14.sql  15.sql  16.sql  17.sql  18.sql  19.sql  2.sql  20.sql  21.sql  22.sql  3.sql  4.sql  5.sql  6.sql  7.sql  8.sql  9.sql
+```
+
+On GIT repo:
+Reports Generated with QGEN:
+https://github.com/Ardziv/DW-Tech-Challenge-1/tree/master/TPCH/2.17.3/dbgen/finals
+
+Script to generate the reports:
+https://github.com/Ardziv/DW-Tech-Challenge-1/blob/master/TPCH/2.17.3/dbgen/gen_query_sql.sh
