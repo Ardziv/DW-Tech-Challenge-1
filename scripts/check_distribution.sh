@@ -22,6 +22,12 @@ with:
 }
 
 ### OLSCHOOL
+AWK='/usr/bin/awk'
+SORT='/usr/bin/sort'
+CAT='/bin/cat'
+PSQL='/usr/bin/psql'
+SUDO='/usr/bin/sudo'
+
 PATH=$1
 FILENAME=$2
 FIELDPOS=$3
@@ -102,6 +108,17 @@ COLNAME=$6
 
 ### MAIN
 ## COUNT & GROUP AGGREGATES ON TBL FILE
-TBLCOUNTS=`awk -F "|" -f tblcount.awk /srv/dbgen/customer.tbl | sort -n -k1`
-echo ${TBLCOUNTS}
+${AWK} -F "|" -f /srv/scripts/tblcount.awk -v field_pos="7" /srv/dbgen/customer.tbl | ${SORT} -n -k1 > t1
+for i in `${CAT} t1`; do
+	echo $i
+done
 ## COUNT & GROUP AGGREGATES ON TBL FILE
+
+## TABLE SQL COUNT
+echo "select $COLNAME, count(*)
+from $TBNAME
+group by $COLNAME
+order by $COLNAME" > tblcount.sql
+${SUDO} -u postgres ${PSQL} -f tblcount.sql ${DBNAME}
+## TABLE SQL COUNT
+
