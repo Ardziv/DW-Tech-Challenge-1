@@ -63,10 +63,10 @@ def __main__():
 	# DEBUG
 
 	# execute DBGEN with the scale
-	#runDbgen(args.scale)
+	runDbgen(args.scale)
 
 	# execute TBL2CSV 
-	#runTbl2Csv(DBGEN.PATH,args.data_path)
+	runTbl2Csv(DBGEN.PATH,args.data_path)
 
 	# execute runDropConstraints 
 	runDropConstraints(args.db_name)
