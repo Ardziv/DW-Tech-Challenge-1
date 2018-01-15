@@ -1,0 +1,42 @@
+# tpch_setup.yml
+
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  vars:
+    ami_id: ami-8e2309eb
+  vars_files:
+    - external_vars.yml
+  
+
+  tasks:
+
+    - name: Provision a set of instances
+      ec2:
+	aws_access_key: "{{ec2_access_key}}"
+	aws_secret_key: "{{ec2_secret_key}}"
+        key_name: TPCH-key
+        group: tpch
+        instance_type: t2.micro
+        image: "{{ ami_id }}"
+        wait: true
+        exact_count: 1
+        count_tag:
+            Name: TPCH
+        instance_tags:
+            Name: TPCH
+      register: ec2
+
+   - name: Add all instance public IPs to host group
+     add_host: hostname={{ item.public_ip }} groups=ec2hosts
+     with_items: "{{ ec2.instances }}"
+
+- hosts: ec2hosts
+  name: configuration play
+  user: ec2-user
+  gather_facts: true
+
+  tasks:
+
+     - name: Check NTP service
+       service: name=ntpd state=started
