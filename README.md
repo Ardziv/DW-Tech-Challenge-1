@@ -518,6 +518,17 @@ FROM LINEITEM
 GROUP BY L_RETURNFLAG, L_LINESTATUS
 ORDER BY L_RETURNFLAG,L_LINESTATUS;
 ```
+Output looks like this:
+```sql
+root@tpch:/srv/repo/DW-Tech-Challenge-1/scripts# sudo -u postgres psql -f lineitem-aggregates.sql tpch
+ l_returnflag | l_linestatus |   sum_qty   | sum_base_price  |  sum_disc_price   |     sum_charge      |       avg_qty       |     avg_price      |        avg_disc        | count_order 
+--------------+--------------+-------------+-----------------+-------------------+---------------------+---------------------+--------------------+------------------------+-------------
+ A            | F            | 37734107.00 |  56586554400.73 |  53758257134.8700 |  55909065222.827692 | 25.5220058532573370 | 38273.129734621672 | 0.04998529583839761162 |     1478493
+ N            | F            |   991417.00 |   1487504710.38 |   1413082168.0541 |   1469649223.194375 | 25.5164719205229835 | 38284.467760848304 | 0.05009342667421629691 |       38854
+ N            | O            | 76633518.00 | 114935210409.19 | 109189591897.4720 | 113561024263.013782 | 25.5020196352876108 | 38248.015609058642 | 0.05000025956756044430 |     3004998
+ R            | F            | 37719753.00 |  56568041380.90 |  53741292684.6040 |  55889619119.831932 | 25.5057936126907707 | 38250.854626099657 | 0.05000940583012705647 |     1478870
+(4 rows)
+```
 
 ##### QGEN:
 #### ANSWER: I noticed during the compilation of the TPCH dbgen binary that there were as well a too called "qgen" which seems to stands for "query generator".
