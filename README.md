@@ -495,6 +495,31 @@ TPC-H tables are in 3NF. Provide a second set of tables in the dimensional model
 
 Points, too, if you can provide a few more queries outside of the TPC-H set that demonstrate your understanding of the schema and its data.
 
+##### LINEITEM AGGREGATES:
+#### ANSWER: I have written a simple query around lineitem to perform some aggregation of data (scripts/lineitem-aggregates.sql).
+On GIT repo:
+https://github.com/Ardziv/DW-Tech-Challenge-1/blob/master/scripts/lineitem-aggregates.sql
+
+```sql
+SELECT 
+L_RETURNFLAG, 
+L_LINESTATUS, 
+SUM(L_QUANTITY) AS SUM_QTY,
+SUM(L_EXTENDEDPRICE) AS SUM_BASE_PRICE, 
+SUM(L_EXTENDEDPRICE*(1-L_DISCOUNT)) AS SUM_DISC_PRICE,
+SUM(L_EXTENDEDPRICE*(1-L_DISCOUNT)*(1+L_TAX)) AS SUM_CHARGE, 
+AVG(L_QUANTITY) AS AVG_QTY,
+AVG(L_EXTENDEDPRICE) AS AVG_PRICE, 
+AVG(L_DISCOUNT) AS AVG_DISC,  
+COUNT(*) AS COUNT_ORDER
+
+FROM LINEITEM
+
+GROUP BY L_RETURNFLAG, L_LINESTATUS
+ORDER BY L_RETURNFLAG,L_LINESTATUS;
+```
+
+##### QGEN:
 #### ANSWER: I noticed during the compilation of the TPCH dbgen binary that there were as well a too called "qgen" which seems to stands for "query generator".
 I have wrote a script to generate the template queries provided with the TPCH toolkit.
 The results queries are available on GIT repo in the folder .../dbgen/finals/1.sql - 22.sql
