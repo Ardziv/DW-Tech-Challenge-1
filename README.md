@@ -474,18 +474,20 @@ from an "end to end" point of view, the worfklow will look like below:
 TPC-H tables are in 3NF. Provide a second set of tables in the dimensional model and the transformational logic to populate them. We shall award points even if this item is incomplete but clearly shows the beginnings of a viable solution.
 
 #### ANSWER: based on the existing dimensions and facts tables available, and after looking at their data, i would suggest to develop a few more dimensions to help the business:
-- Dimension: "promotion / fidelity": a dimension to track and analyse the behavior of the customer. it can be populated with following information:
+- Dimension: **_"promotion / fidelity"_**: a dimension to track and analyse the behavior of the customer. it can be populated with following information:
 	* Most of the data can be populated from existing "order" and "customer" tables
 	* The dimension shall contain some fields related to the below points:
 		* customer_bought_this_already: yes/no
 		* does the customer buy more because product has more discount?
-		* bought? 
-	* what is the average time betwen two orders from same customer?
-- Dimension: "bestseller": a fact/dimension to track the most selled item and what changed
+		* how many fidelity points the customer has ? 
+		* how many times the customer bought something with discount price?
+		* does the customer has preferred price list? 
+		* what is the average time betwen two orders from same customer?
+- Dimension: **_"bestseller"_**: a fact/dimension to track the most selled item and what changed
 	* which product has higher unit sold?
 	* how much net profit / net margins every month?
 	* did we do some campaign to sell more of this product?
-- Dimension: "bestprofit": a fact/dimension to track the proucts generating the most profit 
+- Dimension: **_"bestprofit"_**: a fact/dimension to track the proucts generating the most profit 
 	* which product has higher margins?
 	* how many of them are sold every month?
 	* did we do some campaign to sell more of this product?
