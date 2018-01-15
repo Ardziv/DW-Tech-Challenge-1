@@ -12,7 +12,7 @@
 
 #### 1- Create a EC2 T2.MICRO instance
 #### ANSWER: I have manually created a first instance for this challenge, using the AMI:postgresql-ubuntu-16-04-hvm-22092017-201709220907 (ami-af92b0ca) that is available from Amazon. 
-After reconfiguring it, I have created a private AMI: TPCH (ami-8e2309eb)
+After reconfiguring it, I have created a private AMI: **TPCH (ami-8e2309eb)**
 
 Then i have also wrote a playbook in YAML for Ansible to be able to deploy new instance based on my template AMI:TPCH (ami-8e2309eb)
 
@@ -28,6 +28,7 @@ On GIT Repo:
 * BOTO
 
 ```sh 
+ANSIBLE:
 # sudo apt-get update
 # sudo apt-get install software-properties-common
 # sudo apt-add-repository ppa:ansible/ansible
@@ -416,19 +417,20 @@ The Ideal architecture shall have the following key components to be solid and s
 1. Visualization tool easily accesible
 	* AWS QuickSight: Dashboard / reporting and visualization tool
 
+
 ##### Scenario 2: Full OpenSource Stack (pros: freedom to run anywhere, cons: N/A)
 1. Real Time Data Feed
 	* Apache KAFKA
 	* LogStach
+	* Flume
 1. ETL stack
-
+	* Apache Camel
+	* Sqoop + Zookeeper
 1. Big Data / Large Storage / Data Warehouse
-	* Apache Hadoop
-	* Apache Cassandra
-	* Apache Hive
-	* ELK
+	* Apache Hadoop (HDFS / HBASE)
+	* Apache Hive (Data Warehous)
 1. Query language
-	* Apache Hive
+	* Apache Hive (SQL-like)
 	* Elastic Search
 	* R
 	* Python
@@ -438,15 +440,38 @@ The Ideal architecture shall have the following key components to be solid and s
 	* Tableau
 	* Kibana
 
+My preference will go to the Scenario 2, with a particular emphasis on Apache HIVE.
+There are big company like AirBnB that are using Apache HIVE for their Data Management.
+They are running a 11PetaByte DataWarehous, that they recently migrated and split in two:
+1. One HADOOP/HIVE for Production Workloads/Batch processes
+1. One HADOOP/HIVE for ADHOC queries
+
+They have created and shared with the community a tool called "ReAir" that is facilitating the migration of HIVE datawarehouse. (https://github.com/airbnb/reair)
+
+Idealy speaking, the Foundation of a good IS is to have a clear vision and balance between costs, manageability and scalability.
+The OpenSource (scenario 2) seems to reflects most of these criterias, and the Stacks available for each layer are quite mature and production ready.
+
+From an "end to end" point of view, the worfklow will look like below:
+![alt text][hadoop]
+1. Data is entering the Warehouse from multiple agents (Flume,KAFKA,Logstach)
+1. It is "routed" from "Camel" to the datastore depending on the type of log input
+1. Data can be part of Workflow (Oozie) and scripted if needed.
+1. Eventually the data will end up on HBASE after being "mapped reduced" (YARN)
+1. It is then stored permanently onto the HDFS buckets/HBASE 
+1. Data is ready for consumption by HIVE / Qlickview or other tools or scripts.
+
+
 ### Star schema
 
 TPC-H tables are in 3NF. Provide a second set of tables in the dimensional model and the transformational logic to populate them. We shall award points even if this item is incomplete but clearly shows the beginnings of a viable solution.
 
 #### ANSWER: based on the existing dimensions and facts tables available, and after looking at their data, i would suggest to develop a few more dimensions to help the business:
 - Dimension: "promotion / fidelity": a dimension to track and analyse the behavior of the customer. it can be populated with following information:
-	* customer_bought_this_alraedy: yes/no
-	* does the customer buy more because product has more discount?
-	* which supplier has a small discount? 
+	* Most of the data can be populated from existing "order" and "customer" tables
+	* The dimension shall contain some fields related to the below points:
+		* customer_bought_this_already: yes/no
+		* does the customer buy more because product has more discount?
+		* bought? 
 	* what is the average time betwen two orders from same customer?
 - Dimension: "bestseller": a fact/dimension to track the most selled item and what changed
 	* which product has higher unit sold?
@@ -475,3 +500,5 @@ https://github.com/Ardziv/DW-Tech-Challenge-1/tree/master/TPCH/2.17.3/dbgen/fina
 
 Script to generate the reports:
 https://github.com/Ardziv/DW-Tech-Challenge-1/blob/master/TPCH/2.17.3/dbgen/gen_query_sql.sh
+
+[hadoop]: https://github.com/Ardziv/DW-Tech-Challenge-1/blob/master/HADOOP.png "Hadoop workflow"
