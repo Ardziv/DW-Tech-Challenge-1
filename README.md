@@ -11,8 +11,43 @@
 ### Environment
 
 #### 1- Create a EC2 T2.MICRO instance
+#### ANSWER: I have manually created a first instance for this challenge, using the AMI:postgresql-ubuntu-16-04-hvm-22092017-201709220907 (ami-af92b0ca) that is available from Amazon. 
+After reconfiguring it, I have created a private AMI: TPCH (ami-8e2309eb)
 
-1bis - Create a EC2 T2.MICRO instance with Ansible / Terraform / CloudFormation script with pre-configured Postgresql and Security Group
+Then i have also wrote a playbook in YAML for Ansible to be able to deploy new instance based on my template AMI:TPCH (ami-8e2309eb)
+
+#### 1bis - Create a EC2 T2.MICRO instance with Ansible  script with pre-configured Postgresql and Security Group
+I have written a ANSIBLE script and seperated the AWS access keys and secret keys into a "vars_files" (ideally with more time i would have encrypted it with ansible-vault)
+
+On GIT Repo:
+* tpch_setup.yml: https://github.com/Ardziv/DW-Tech-Challenge-1/blob/master/scripts/ansible/tpch_setup.yml
+* external_vars.yml: https://github.com/Ardziv/DW-Tech-Challenge-1/blob/master/scripts/ansible/external_vars.yml
+
+##### Prerequisite:
+* Ansible 
+* BOTO
+
+```sh 
+# sudo apt-get update
+# sudo apt-get install software-properties-common
+# sudo apt-add-repository ppa:ansible/ansible
+# sudo apt-get update
+# sudo apt-get install ansible
+
+BOTO:
+# sudo apt-get install python-boto
+```
+
+##### Saling out with Ansible:
+You can create new instance of the TPCH (ami-8e2309eb) by using the below command:
+
+```sh
+# ansible-playbook tpch_setup.yml
+
+```
+
+**Note: you have to modify the two variables "ec2_access_key" and "ec2_secret_key"  in "external_vars.yml" file prior launching this command.**
+
 
 #### 2- Open Security Group port 22 to my local public IP
 
