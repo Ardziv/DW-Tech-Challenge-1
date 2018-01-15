@@ -416,7 +416,15 @@ The Ideal architecture shall have the following key components to be solid and s
 	* AWS ATHENA: query language to search on processed data stored on S3.
 1. Visualization tool easily accesible
 	* AWS QuickSight: Dashboard / reporting and visualization tool
-
+ 
+from an "end to end" point of view, the worfklow will look like below:
+![alt text][awsglue]
+1. data is entering the warehouse from multiple agents (kynesis,kafka,logstach) (data extraction)
+1. it is "routed" by "kynesis firehose" to the datastore depending on the type of log input (data movement)
+1. data can be part of workflow (kynesis analytics) and scripted if needed. (data transformation)
+1. eventually the data will end up on S3 buckets after being "glued" (AWS Glue) (data transformation)
+1. it is then stored permanently onto the S3 buckets - (data loading/storing)
+1. data is ready for consumption by AWS Athena and AWS Quicksight. - (data access)
 
 ##### Scenario 2: Full OpenSource Stack (pros: freedom to run anywhere, cons: N/A)
 1. Real Time Data Feed
@@ -451,14 +459,14 @@ They have created and shared with the community a tool called "ReAir" that is fa
 Idealy speaking, the Foundation of a good IS is to have a clear vision and balance between costs, manageability and scalability.
 The OpenSource (scenario 2) seems to reflects most of these criterias, and the Stacks available for each layer are quite mature and production ready.
 
-From an "end to end" point of view, the worfklow will look like below:
+from an "end to end" point of view, the worfklow will look like below:
 ![alt text][hadoop]
-1. Data is entering the Warehouse from multiple agents (Flume,KAFKA,Logstach)
-1. It is "routed" from "Camel" to the datastore depending on the type of log input
-1. Data can be part of Workflow (Oozie) and scripted if needed.
-1. Eventually the data will end up on HBASE after being "mapped reduced" (YARN)
-1. It is then stored permanently onto the HDFS buckets/HBASE 
-1. Data is ready for consumption by HIVE / Qlickview or other tools or scripts.
+1. data is entering the warehouse from multiple agents (flume,kafka,logstach) - (data extraction)
+1. it is "routed" by "camel" to the datastore depending on the type of log input - (data movement)
+1. data can be part of workflow (oozie) and scripted if needed (data trasnformation)
+1. eventually the data will end up on hbase after being "mapped reduced" (yarn)
+1. it is then stored permanently onto the hdfs buckets/hbase - (data loading/storing)
+1. data is ready for consumption by hive / qlickview or other tools or scripts. - (data access)
 
 
 ### Star schema
@@ -502,3 +510,4 @@ Script to generate the reports:
 https://github.com/Ardziv/DW-Tech-Challenge-1/blob/master/TPCH/2.17.3/dbgen/gen_query_sql.sh
 
 [hadoop]: https://github.com/Ardziv/DW-Tech-Challenge-1/blob/master/HADOOP.png "Hadoop workflow"
+[awsglue]: https://github.com/Ardziv/DW-Tech-Challenge-1/blob/master/AWS-real-time-batch.gif "AWS serverless BigData"
